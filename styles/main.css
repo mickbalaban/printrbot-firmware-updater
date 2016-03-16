@@ -1,0 +1,21 @@
+.content {
+  padding: 10px;
+}
+
+
+body {
+  background-color: #ededed;
+}
+
+.info {
+  margin-bottom: 6px;
+
+}
+
+select {
+  font-size: 1em;
+}
+
+.logo {
+  margin: 10px auto;
+}

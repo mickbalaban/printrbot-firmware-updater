@@ -1,0 +1,15 @@
+{
+  "name": "cnc-updater",
+  "version": "0.0.1",
+  "description": "printrbot cnc firmware updater",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "mick",
+  "license": "ISC",
+  "devDependencies": {
+    "electron-prebuilt": "^0.37.2",
+    "electron-rebuild": "^1.1.3"
+  }
+}
