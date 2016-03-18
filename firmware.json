@@ -1,0 +1,31 @@
+{
+  "printers": [
+    {
+      "model": "Printrbot Simple",
+      "file": "simple.hex",
+      "version": 0.1
+    },
+    {
+      "model": "Printrbot Plus",
+      "file": "plus.hex",
+      "version": 0.1
+    },
+    {
+      "model": "Printrbot Play",
+      "file": "play.hex",
+      "version": 0.1
+    }
+  ],
+  "cnc": [
+    {
+      "model": "Crawlbot",
+      "file": "crawlbot.bin",
+      "version": 0.1
+    },
+    {
+      "model": "Printrbot CNC",
+      "file": "pbcnc.bin",
+      "version": 0.1
+    }
+  ]
+}
