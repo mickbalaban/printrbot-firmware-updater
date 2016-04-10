@@ -24,6 +24,7 @@ function(
       app.channel.trigger('newpage');
     },
 
+
     render: function()
     {
       this.$el.html(this.tpl({app:app}));

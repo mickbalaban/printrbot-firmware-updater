@@ -3,13 +3,15 @@ var remote = require('remote');
 define([
   'app',
   'views/startview',
-  'views/detectview'
+  'views/detectview',
+  'views/infoview'
 ],
 
 function(
   app,
   StartView,
-  DetectView
+  DetectView,
+  InfoView
 )
 {
 
@@ -45,6 +47,12 @@ function(
               var v = this.loadView(new DetectView(), 'detect');
               this.$el.html(v.render());
           }
+
+          if (app.selectedView == 'info') {
+              var v = this.loadView(new InfoView(), 'info');
+              this.$el.html(v.render());
+          }
+
 
           return this.$el;
         }
