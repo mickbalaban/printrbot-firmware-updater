@@ -19,12 +19,12 @@
   "cnc": [
     {
       "model": "Crawlbot",
-      "file": "crawlbot.bin",
+      "file": "crawlbot-0.1.bin",
       "version": 0.1
     },
     {
       "model": "Printrbot CNC",
-      "file": "pbcnc.bin",
+      "file": "pbcnc-0.1.bin",
       "version": 0.1
     }
   ]
