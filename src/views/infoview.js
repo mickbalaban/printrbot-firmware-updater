@@ -48,7 +48,7 @@ function(
         $('.step1').addClass('hidden');
         $('.step2').removeClass('hidden');
       }
-      else if (app.mtype == "t" && idx == 2) {
+      else if (app.mtype == "p" && idx == 2) {
         $('.step2').addClass('hidden');
         $('.step3').removeClass('hidden');
       }
@@ -56,7 +56,7 @@ function(
         $('.step2').addClass('hidden');
         $('.step3').addClass('hidden');
         $('.progress').removeClass('hidden');
-        if (app.mtype == "t")
+        if (app.mtype == "p")
           app.channel.trigger('flash.printrboard');
         else {
           app.channel.trigger('flash.tinyg');
@@ -66,7 +66,6 @@ function(
 
     render: function()
     {
-      var machine_name =
       this.$el.html(this.tpl({
         app:app,
         icon: this.icon,

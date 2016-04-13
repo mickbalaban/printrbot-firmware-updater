@@ -3,10 +3,10 @@ requirejs.config(
   deps: ["main"],
 
   paths: {
-    underscore: '../bower_components/underscore/underscore',
-    backbone: '../bower_components/backbone/backbone',
-    jquery: '../bower_components/jquery/dist/jquery',
-    bootstrap: '../bower_components/bootstrap/dist/js/bootstrap'
+    underscore: '../lib/underscore/underscore',
+    backbone: '../lib/backbone/backbone',
+    jquery: '../lib/jquery/dist/jquery',
+    bootstrap: '../lib/bootstrap/dist/js/bootstrap'
   },
 
   shim: {

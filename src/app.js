@@ -5,9 +5,6 @@ var jquery = require('jquery')
   , fs = require('fs')
   , http = require('http');
 
-window.$ = jquery;
-window.jQuery = jquery;
-
 define([
   'models/firmware'
 ],
@@ -61,34 +58,10 @@ function(
       return true;
   }
 
-  var flashPrintrboard = function(f)
-  {
-
-  }
-
-  var flashTinyG = function(e)
-  {
-
-  }
 
   document.addEventListener('dragover', function(e) {
     e.preventDefault();
     e.stopPropagation();
-
-    if (app.selectedView != "start") return;
-
-    if (isFileValid(e.dataTransfer.files[0])) {
-      // show drop message
-      /*
-      $('.drop-ok-message').removeClass('hidden');
-
-      setTimeout(function() {
-        $('.drop-ok-message').addClass('hidden');
-      }, 1000)
-      */
-    } else {
-      // show alert
-    }
   });
 
   var hideAllStartBlocks = function() {
@@ -108,41 +81,47 @@ function(
         app.selectedView = 'info';
         app.channel.trigger('newpage');
         app.boardType = "printer";
+        app.model = "printer";
       }
       else {
         app.selectedView = 'info';
         app.channel.trigger('newpage');
         app.boardType = "cnc";
+        app.model = "cnc"
       }
       app.channel.trigger('flash.info')
     }
   });
 
   app.channel.on('flash.printrboard', function() {
-    var _dfu = 'resources/dfu-programmer/bin/dfu-programmer';
+    var _dfu = __dirname + '/resources/dfu-programmer/bin/dfu-programmer';
     if (process.platform == 'win32')
-      _dfu = 'resources/dfu-programmer/win/dfu-programmer.exe';
-    exec(_dfu + ' at90usb1286 erase',
-      function (err, stdout, stderr) {
-        if (err !== null) {
-          console.log('exec erase error: ' + err);
-          var _e = _.last(String(err).split(":"));
-          app.channel.trigger("flash.error", _e);
-        } else {
-          app.channel.trigger("flash.writing");
-          exec(_dfu + ' at90usb1286 flash "'+app.imageFile.path+'"',
-            function(err, stdout, stderr) {
-              if (err !== null) {
-                console.log('exec flash error: ' + err);
-                var _e = _.last(String(err).split(":"));
-                app.channel.trigger("flash.error", _e);
-              } else {
-                app.channel.trigger("flash.completed");
+      _dfu = __dirname + 'resources/dfu-programmer/win/dfu-programmer.exe';
+
+    exec('export DYLD_LIBRARY_PATH='+__dirname+'/resources/dfu-programmer/lib; '+_dfu + ' at90usb1286 erase',
+    //exec(_dfu + ' at90usb1286 erase',
+        function (err, stdout, stderr) {
+          if (err !== null) {
+            console.log('exec erase error: ' + err);
+            var _e = _.last(String(err).split(":"));
+            app.channel.trigger("flash.error", _e);
+          } else {
+            app.channel.trigger("flash.writing");
+            exec('export DYLD_LIBRARY_PATH='+__dirname+'/resources/dfu-programmer/lib; '+_dfu + ' at90usb1286 flash "'+app.imageFile.path+'"',
+              function(err, stdout, stderr) {
+                if (err !== null) {
+                  console.log('exec flash error: ' + err);
+                  var _e = _.last(String(err).split(":"));
+                  app.channel.trigger("flash.error", _e);
+                } else {
+                  app.channel.trigger("flash.completed");
+                }
               }
-            }
-          );
-        }
-    });
+            );
+          }
+      }
+   );
+
   });
 
   app.downloadFile = function(f) {
@@ -156,7 +135,7 @@ function(
 
     }
     // if not download it now
-    var file = fs.createWriteStream("downloads/"+f);
+    var file = fs.createWriteStream(__dirname + "/downloads/"+f);
     var url = "http://mickbalaban.github.io/printrbot-firmware-updater/binaries/"+f;
     var request = http.get(url, function(response) {
       response.pipe(file);
@@ -207,24 +186,16 @@ function(
 
       app.comName = detected.comName;
 
-      if (!_skipBootInit) {
-        // if found, try to open the port to set it in boot mode
-        app.serialport = new SerialPort(app.comName, {
-          baudrate: 1200
-        });
-
-        app.serialport.on('open', function () {
-          // now disconnect and run bossac to upload new bin
-          app.serialport.close();
+      exec('stty -f '+app.comName+' 1200', function(err, stdout, stderr) {
+        if (err !== null) {
+          console.log('exec flash error: ' + err);
+          var _e = _.last(String(err).split(":"));
+          app.channel.trigger("flash.error", _e);
+        } else {
           app.channel.trigger("flash.upload-tinyg");
-        });
+        }
+      });
 
-        app.serialport.on('error', function () {
-          app.channel.trigger("flash.error", 'Unable to connect to the board');
-        });
-      } else {
-        app.channel.trigger("flash.upload-tinyg");
-      }
     });
   });
 
@@ -232,16 +203,14 @@ function(
   app.channel.on('flash.upload-tinyg', function() {
     app.channel.trigger("flash.writing");
 
-    var _comName = _.last(app.comName.split("/"));
-
     if (process.platform == 'darwin')
-      var _bossac = 'resources/arduino-flash-tools/tools_darwin/bossac/bin/bossac';
+      var _bossac = __dirname + '/resources/arduino-flash-tools/tools_darwin/bossac/bin/bossac';
     else if (process.platform == 'win32')
-      var _bossac = 'resources/arduino-flash-tools/tools_darwin/bossac/bin/bossac.exe';
+      var _bossac = __dirname + '/resources/arduino-flash-tools/tools_darwin/bossac/bin/bossac.exe';
 
-    console.info(_bossac + ' --port=' + _comName + ' -U true -e -w -v -i -b -R ' + app.imageFile.path);
+    console.info(_bossac + ' -e -w -v -i -b -R ' + app.imageFile.path);
 
-    exec(_bossac + ' --port=' + _comName + ' -U true -e -w -v -i -b -R ' + app.imageFile.path,
+    exec(_bossac + '  -e -w -v -i -b -R ' + app.imageFile.path,
       function(err, stdout, stderr) {
         if (err !== null) {
           console.log('exec flash error: ' + err);

@@ -26,7 +26,11 @@
   <h4>Success</h4>
   <img src="images/success.svg"/>
   <!--<div>Please do not disconnect your printer.</div>-->
-  <p>Firmware successfully updated. Please remove the jumper and restart your printer.</p>
+  <% if (app.mtype == "p") { %>
+  <p>Firmware successfully updated. Please remove the jumper and restart your <%- app.model %>.</p>
+  <% } else { %>
+  <p>Firmware successfully updated. Please restart your <%- app.model %>.</p>
+  <% } %>
 </div>
 
 <div class="download s hidden">

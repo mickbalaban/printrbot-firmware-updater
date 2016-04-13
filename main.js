@@ -2,15 +2,14 @@
 var app = require('app');
 var BrowserWindow = require('browser-window');
 
-
 let mainWindow;
 
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 300, height: 300, x: 300, y:200});
+  mainWindow = new BrowserWindow({width: 300, height: 310, x: 20, y:20});
   mainWindow.loadURL('file://' + __dirname + '/index.html');
-
+  mainWindow.setMenu(null);
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', function() {
     mainWindow = null;
@@ -21,12 +20,14 @@ app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  app.quit();
 });
+
+app.on('open-file', function(event, pathToOpen) {
+	event.preventDefault();
+	console.log(pathToOpen);
+});
+
 
 app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
