@@ -18,8 +18,13 @@
   ],
   "cnc": [
     {
-      "model": "Crawlbot",
+      "model": "Crawlbot 1.0",
       "file": "crawlbot-0.1.bin",
+      "version": 0.1
+    },
+    {
+      "model": "Crawlbot 1.1",
+      "file": "crawlbot-1.1.bin",
       "version": 0.1
     },
     {
