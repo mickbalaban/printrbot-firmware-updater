@@ -2,7 +2,7 @@
   "printers": [
     {
       "model": "Printrbot Simple",
-      "file": "simple-0.1.hex",
+      "file": "simple-0.2.hex",
       "version": 0.1
     },
     {
